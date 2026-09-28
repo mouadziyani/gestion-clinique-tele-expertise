@@ -1,12 +1,14 @@
 package ma.youcode.clinic.modal;
 
+import ma.youcode.clinic.modal.enums.UserRole;
+
 public class User {
     private long id;
     private String username;
     private String password;
-    private String Role;
+    private UserRole Role;
 
-    public User(long id, String username, String password, String role) {
+    public User(long id, String username, String password, UserRole role) {
         this.id = id;
         this.username = username;
         this.password = password;
@@ -37,11 +39,11 @@ public class User {
         this.password = password;
     }
 
-    public String getRole() {
+    public UserRole getRole() {
         return Role;
     }
 
-    public void setRole(String role) {
+    public void setRole(UserRole role) {
         Role = role;
     }
 }

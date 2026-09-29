@@ -46,14 +46,14 @@ public class JdbcUserDao implements UserDao {
     }
 
     @Override
-    public User findById(int id) {
+    public User findById(long id) {
 
         String sql = "SELECT * FROM users WHERE id = ? ";
 
         try (Connection con = DatasourceConfig.getDataSource().getConnection();
              PreparedStatement pstmt = con.prepareStatement(sql)) {
 
-            pstmt.setInt(1, id);
+            pstmt.setLong(1, id);
             ResultSet result = pstmt.executeQuery();
 
             if (result.next()) {

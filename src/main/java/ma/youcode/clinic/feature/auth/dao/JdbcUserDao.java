@@ -15,7 +15,7 @@ public class JdbcUserDao implements UserDao {
         String sql = "INSERT INTO users(username, password, role) VALUES (?, ?, ?)";
 
         try (Connection con = DatasourceConfig.getDataSource().getConnection();
-             PreparedStatement pstmt = con.prepareStatement(sql)) {
+                PreparedStatement pstmt = con.prepareStatement(sql)) {
 
             pstmt.setString(1, user.getUsername());
             pstmt.setString(2, user.getPassword());
@@ -29,14 +29,14 @@ public class JdbcUserDao implements UserDao {
     }
 
     @Override
-    public void delete(int id) {
+    public void delete(long id) {
 
         String sql = "DELETE FROM users WHERE id = ?";
 
         try (Connection con = DatasourceConfig.getDataSource().getConnection();
-             PreparedStatement pstmt = con.prepareStatement(sql)) {
+                PreparedStatement pstmt = con.prepareStatement(sql)) {
 
-            pstmt.setInt(1, id);
+            pstmt.setLong(1, id);
 
             pstmt.executeUpdate();
 
@@ -51,7 +51,7 @@ public class JdbcUserDao implements UserDao {
         String sql = "SELECT * FROM users WHERE id = ? ";
 
         try (Connection con = DatasourceConfig.getDataSource().getConnection();
-             PreparedStatement pstmt = con.prepareStatement(sql)) {
+                PreparedStatement pstmt = con.prepareStatement(sql)) {
 
             pstmt.setLong(1, id);
             ResultSet result = pstmt.executeQuery();
@@ -75,8 +75,8 @@ public class JdbcUserDao implements UserDao {
         List<User> users = new ArrayList<>();
 
         try (Connection con = DatasourceConfig.getDataSource().getConnection();
-             PreparedStatement pstmt = con.prepareStatement(sql);
-             ResultSet result = pstmt.executeQuery()) {
+                PreparedStatement pstmt = con.prepareStatement(sql);
+                ResultSet result = pstmt.executeQuery()) {
 
             while (result.next()) {
                 users.add(new User(result.getLong("id"), result.getString("username"),
@@ -96,7 +96,7 @@ public class JdbcUserDao implements UserDao {
         String sql = "SELECT * FROM users WHERE username = ?";
 
         try (Connection con = DatasourceConfig.getDataSource().getConnection();
-             PreparedStatement pstmt = con.prepareStatement(sql)) {
+                PreparedStatement pstmt = con.prepareStatement(sql)) {
 
             pstmt.setString(1, username);
             ResultSet result = pstmt.executeQuery();

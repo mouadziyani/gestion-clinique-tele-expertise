@@ -8,7 +8,7 @@ public interface Dao<T>{
 
     T findById(long id);
 
-    void delete(int id);
+    void delete(long id);
 
     List<T> findAll();
 

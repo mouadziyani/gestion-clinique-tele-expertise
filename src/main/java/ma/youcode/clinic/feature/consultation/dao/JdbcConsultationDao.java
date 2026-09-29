@@ -59,7 +59,7 @@ public class JdbcConsultationDao implements ConsultationDao {
     }
 
     @Override
-    public void delete(int id) {
+    public void delete(long id) {
         String sql = "DELETE FROM consultation WHERE id = ?";
 
         try (

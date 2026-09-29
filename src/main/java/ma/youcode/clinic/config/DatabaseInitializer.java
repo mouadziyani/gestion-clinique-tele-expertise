@@ -14,6 +14,8 @@ public class DatabaseInitializer {
 
     public void init() {
         createUserTable();
+        createPatientTable();
+        createConsultationTable();
     }
 
     private void createUserTable() {
@@ -23,6 +25,62 @@ public class DatabaseInitializer {
                     username VARCHAR(50) NOT NULL UNIQUE,
                     password VARCHAR(255) NOT NULL,
                     role VARCHAR(30) NOT NULL
+                )
+                """;
+
+        try (
+                Connection connection = dataSource.getConnection();
+                PreparedStatement statement = connection.prepareStatement(sql);
+        ) {
+            statement.executeUpdate();
+
+        } catch (SQLException e) {
+            System.out.println("Error : " + e.getMessage());
+        }
+    }
+
+    private void createPatientTable() {
+        String sql = """
+                CREATE TABLE IF NOT EXISTS patient (
+                    id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                    nom VARCHAR(100) NOT NULL,
+                    prenom VARCHAR(100) NOT NULL,
+                    date_naissance DATE NOT NULL,
+                    numero_securite_sociale VARCHAR(20) NOT NULL UNIQUE,
+                    tension_arterielle VARCHAR(10),
+                    frequence_cardiaque DOUBLE,
+                    temperature DOUBLE,
+                    frequence_respiratoire DOUBLE,
+                    date_arrivee DATETIME NOT NULL
+                )
+                """;
+
+        try (
+                Connection connection = dataSource.getConnection();
+                PreparedStatement statement = connection.prepareStatement(sql);
+        ) {
+            statement.executeUpdate();
+
+        } catch (SQLException e) {
+            System.out.println("Error : " + e.getMessage());
+        }
+    }
+
+    private void createConsultationTable() {
+        String sql = """
+                CREATE TABLE IF NOT EXISTS consultation (
+                    id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                    patient_id BIGINT NOT NULL,
+                    doctor_id BIGINT NOT NULL,
+                    motif VARCHAR(255) NOT NULL,
+                    observations TEXT,
+                    diagnostic TEXT,
+                    treatment TEXT,
+                    cout DECIMAL(10, 2),
+                    statut VARCHAR(30) NOT NULL,
+                    date_consultation DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                    CONSTRAINT fk_consultation_patient FOREIGN KEY (patient_id) REFERENCES patient(id),
+                    CONSTRAINT fk_consultation_doctor FOREIGN KEY (doctor_id) REFERENCES `users`(id)
                 )
                 """;
 

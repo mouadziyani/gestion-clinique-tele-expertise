@@ -6,4 +6,5 @@ import ma.youcode.clinic.modal.User;
 public interface UserDao extends Dao<User> {
 
     User findByUsername(String username);
+    
 }

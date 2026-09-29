@@ -1,9 +1,14 @@
-package ma.youcode.clinic.feature.auth.dao;
+package ma.youcode.clinic.feature.consultation.dao;
 
-import java.sql.*;
-import java.util.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import ma.youcode.clinic.config.DatasourceConfig;
+import ma.youcode.clinic.feature.auth.dao.UserDao;
 import ma.youcode.clinic.modal.User;
 import ma.youcode.clinic.modal.enums.UserRole;
 
@@ -112,4 +117,5 @@ public class JdbcUserDao implements UserDao {
 
         return null;
     }
+
 }

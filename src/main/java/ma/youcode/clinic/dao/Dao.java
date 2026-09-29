@@ -6,7 +6,7 @@ public interface Dao<T>{
     
     void save(T t);
 
-    T findById(int id);
+    T findById(long id);
 
     void delete(int id);
 

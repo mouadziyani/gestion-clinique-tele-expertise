@@ -54,7 +54,7 @@ public class JdbcConsultationDao implements ConsultationDao {
     }
 
     @Override
-    public Consultation findById(int id) {
+    public Consultation findById(long id) {
         return null;
     }
 
@@ -89,8 +89,8 @@ public class JdbcConsultationDao implements ConsultationDao {
 
             try (ResultSet result = statement.executeQuery()) {
                 while (result.next()) {
-                    Patient patient = patientDAO.findById(result.getInt("patient_id"));
-                    User doctor = userDao.findById(result.getInt("doctor_id"));
+                    Patient patient = patientDAO.findById(result.getLong("patient_id"));
+                    User doctor = userDao.findById(result.getLong("doctor_id"));
 
                     consultations.add(new Consultation(
                             result.getLong("id"),

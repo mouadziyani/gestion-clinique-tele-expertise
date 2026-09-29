@@ -7,6 +7,11 @@
     <groupId>ma.youcode</groupId>
     <artifactId>gestion-clinique-tele-expertise</artifactId>
     <version>1.0-SNAPSHOT</version>
+    <packaging>war</packaging>
+
+    <build>
+        <finalName>gestion-clinic</finalName>
+    </build>
 
     <properties>
         <maven.compiler.source>17</maven.compiler.source>

@@ -43,7 +43,20 @@ public class JdbcConsultationDao implements ConsultationDao {
 
     @Override
     public void delete(int id) {
+        String sql = "DELETE FROM consultation WHERE id = ?";
 
+        try (
+                Connection connection = DatasourceConfig.getDataSource().getConnection();
+                PreparedStatement statement = connection.prepareStatement(sql);
+        ) {
+
+            statement.setLong(1, id);
+
+            statement.executeUpdate();
+
+        } catch (SQLException e) {
+            System.err.println("Error : " + e.getMessage());
+        }
     }
 
     @Override

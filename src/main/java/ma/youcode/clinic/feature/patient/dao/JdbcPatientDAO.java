@@ -21,26 +21,24 @@ public class JdbcPatientDAO implements PatientDAO {
 
         try (
                 Connection connection = DatasourceConfig.getDataSource().getConnection();
-                PreparedStatement statement = connection.prepareStatement(sql);
-                ) {
+                PreparedStatement statement = connection.prepareStatement(sql);) {
 
-            statement.setLong(1 , id);
+            statement.setLong(1, id);
 
             try (ResultSet result = statement.executeQuery()) {
-                 if (result.next()) {
-                     return new Patient(
-                             result.getLong("id"),
-                             result.getString("nom"),
-                             result.getString("prenom"),
-                             result.getDate("date_naissance").toLocalDate(),
-                             result.getString("numero_securite_sociale"),
-                             result.getString("tension_arterielle"),
-                             result.getDouble("frequence_cardiaque"),
-                             result.getDouble("temperature"),
-                             result.getDouble("frequence_respiratoire"),
-                             result.getTimestamp("date_arrivee").toLocalDateTime()
-                     );
-                 }
+                if (result.next()) {
+                    return new Patient(
+                            result.getLong("id"),
+                            result.getString("nom"),
+                            result.getString("prenom"),
+                            result.getDate("date_naissance").toLocalDate(),
+                            result.getString("numero_securite_sociale"),
+                            result.getString("tension_arterielle"),
+                            result.getDouble("frequence_cardiaque"),
+                            result.getDouble("temperature"),
+                            result.getDouble("frequence_respiratoire"),
+                            result.getTimestamp("date_arrivee").toLocalDateTime());
+                }
             }
 
         } catch (SQLException e) {
@@ -50,7 +48,7 @@ public class JdbcPatientDAO implements PatientDAO {
     }
 
     @Override
-    public void delete(int id) {
+    public void delete(long id) {
 
     }
 

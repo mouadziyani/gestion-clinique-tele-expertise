@@ -16,7 +16,7 @@ public class JdbcPatientDAO implements PatientDAO {
     }
 
     @Override
-    public Patient findById(int id) {
+    public Patient findById(long id) {
         String sql = "SELECT * FROM patient WHERE id = ?";
 
         try (

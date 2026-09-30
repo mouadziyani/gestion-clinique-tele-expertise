@@ -1,7 +1,5 @@
 package ma.youcode.clinic.feature.auth.service;
 
-import java.util.Optional;
-
 import org.mindrot.jbcrypt.BCrypt;
 
 import ma.youcode.clinic.feature.auth.dao.JdbcUserDao;

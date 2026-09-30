@@ -19,12 +19,10 @@ public class AuthService {
         User user = userDao.findByUsername(username);
 
         if(user == null){
-            System.out.println("user not trouvable");
             return null;
         }
 
         if (!BCrypt.checkpw(password, user.getPassword())) {
-            System.out.println("password incorrect");
             return null;
         }
 

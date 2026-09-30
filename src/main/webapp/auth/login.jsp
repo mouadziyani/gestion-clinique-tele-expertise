@@ -13,6 +13,16 @@
 
 <form action="${pageContext.request.contextPath}/auth/login" method="post">
 
+    <%
+        String error = (String) request.getAttribute("error");
+
+        if (error != null) {
+    %>
+
+    <p style="color: red;">${error}</p>
+
+    <% } %>
+
     <div>
         <label for="username">Nom d'utilisateur :</label>
         <input

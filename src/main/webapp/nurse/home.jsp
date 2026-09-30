@@ -9,7 +9,9 @@
 
 <body>
 
-<h1>Nurse</h1>
+    <h1>Nurse</h1>
+    <a href="<%= request.getContextPath() + "/nurse/patient/add" %>">Add Patient</a>
+    <a href="<%= request.getContextPath() + "/nurse/patient/today" %>">Patient d'aujourd'hui</a>
 
 </body>
 </html>

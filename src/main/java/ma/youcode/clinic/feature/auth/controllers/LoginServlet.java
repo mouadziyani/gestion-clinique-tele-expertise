@@ -7,6 +7,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import ma.youcode.clinic.feature.auth.service.AuthService;
 import ma.youcode.clinic.modal.User;
+import ma.youcode.clinic.modal.enums.UserRole;
 
 import java.io.IOException;
 
@@ -40,6 +41,11 @@ public class LoginServlet extends HttpServlet {
         }
 
         req.getSession().setAttribute("user", user);
-        resp.sendRedirect(req.getContextPath() + "/home");
+
+        if (user.getRole() == UserRole.GENERALIST) {
+            resp.sendRedirect(req.getContextPath() + "/generalist/home");
+        } else if (user.getRole() == UserRole.NURSE) {
+            resp.sendRedirect(req.getContextPath() + "/nurse/home");
+        }
     }
 }

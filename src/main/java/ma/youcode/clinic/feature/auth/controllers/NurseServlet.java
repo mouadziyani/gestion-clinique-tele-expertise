@@ -12,6 +12,6 @@ import java.io.IOException;
 public class NurseServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        req.getRequestDispatcher("/nurse/home.jsp");
+        req.getRequestDispatcher("/nurse/home.jsp").forward(req , resp);
     }
 }

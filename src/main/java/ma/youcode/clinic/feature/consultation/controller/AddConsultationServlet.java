@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @WebServlet("/generalist/consultations/add")
-public class ConsultationServlet extends HttpServlet {
+public class AddConsultationServlet extends HttpServlet {
 
     private final PatientService patientService = new PatientService();
     private final ConsultationService consultationService = new ConsultationService();

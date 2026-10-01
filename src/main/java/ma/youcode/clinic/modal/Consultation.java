@@ -32,6 +32,18 @@ public class Consultation {
         this.statut = statut;
         this.dateConsultation = dateConsultation;
     }
+    public Consultation( Patient patient, User doctor, String motif, String observations, String diagnostic, String treatment, Double cout, StatutConsultation statut, LocalDateTime dateConsultation) {
+
+        this.patient = patient;
+        this.doctor = doctor;
+        this.motif = motif;
+        this.observations = observations;
+        this.diagnostic = diagnostic;
+        this.treatment = treatment;
+        this.cout = cout;
+        this.statut = statut;
+        this.dateConsultation = dateConsultation;
+    }
 
     public Long getId() {
         return id;

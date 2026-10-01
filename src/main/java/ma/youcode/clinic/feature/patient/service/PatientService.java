@@ -14,4 +14,6 @@ public class PatientService {
     public void createPatient(Patient patient) {
         patientDAO.save(patient);
     }
+
+    private void validatePatient() {}
 }

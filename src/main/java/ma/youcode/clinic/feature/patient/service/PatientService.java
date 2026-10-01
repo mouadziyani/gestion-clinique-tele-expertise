@@ -8,6 +8,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeParseException;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 public class PatientService {
@@ -81,5 +82,9 @@ public class PatientService {
         if (frequenceRespiratoire < 1 || frequenceRespiratoire > 80) errors.put("frequenceRespiratoire" , "Fréquence respiratoir invalide");
 
         return errors;
+    }
+
+    public List<Patient> findPatientsDuJour(LocalDate date) {
+        return patientDAO.findPatientsByDay(date);
     }
 }

@@ -7,6 +7,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 public class JdbcPatientDAO implements PatientDAO {
@@ -75,5 +77,48 @@ public class JdbcPatientDAO implements PatientDAO {
     @Override
     public List<Patient> findAll() {
         return List.of();
+    }
+
+    @Override
+    public List<Patient> findPatientsByDay(LocalDate date) {
+        String sql = """
+                SELECT *
+                FROM patient
+                WHERE DATE(date_arrivee) = ?
+                ORDER BY date_arrivee ASC
+                """;
+
+        List<Patient> patients = new ArrayList<>();
+
+        try (
+                Connection connection = DatasourceConfig.getDataSource().getConnection();
+                PreparedStatement stmt = connection.prepareStatement(sql)
+        ) {
+            stmt.setDate(1, java.sql.Date.valueOf(date));
+
+            try (ResultSet result = stmt.executeQuery()) {
+                while (result.next()) {
+                    Patient patient = new Patient(
+                            result.getLong("id"),
+                            result.getString("nom"),
+                            result.getString("prenom"),
+                            result.getDate("date_naissance").toLocalDate(),
+                            result.getString("numero_securite_sociale"),
+                            result.getString("tension_arterielle"),
+                            result.getDouble("frequence_cardiaque"),
+                            result.getDouble("temperature"),
+                            result.getDouble("frequence_respiratoire"),
+                            result.getTimestamp("date_arrivee").toLocalDateTime()
+                    );
+
+                    patients.add(patient);
+                }
+            }
+
+        } catch (SQLException e) {
+            System.err.println("Error : " + e.getMessage());
+        }
+
+        return patients;
     }
 }

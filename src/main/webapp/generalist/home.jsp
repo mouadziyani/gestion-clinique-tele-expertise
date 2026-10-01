@@ -11,5 +11,6 @@
 
 <h1>Generalist</h1>
 
+<a href="<%= request.getContextPath() %>/auth/logout">Logout</a>
 </body>
 </html>

@@ -8,7 +8,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import ma.youcode.clinic.feature.auth.service.AuthService;
 import ma.youcode.clinic.modal.User;
 import ma.youcode.clinic.modal.enums.UserRole;
-
+import java.util.UUID;
 import java.io.IOException;
 
 @WebServlet("/auth/login")
@@ -24,6 +24,9 @@ public class LoginServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        String csrfToken= UUID.randomUUID().toString();
+        req.getSession().setAttribute("csrfToken", csrfToken);
+        req.setAttribute("csrfToken", csrfToken);
         req.getRequestDispatcher("/auth/login.jsp").forward(req , resp);
     }
 

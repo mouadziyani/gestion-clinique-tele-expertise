@@ -33,8 +33,7 @@ public class JdbcConsultationDao implements ConsultationDao {
 
         try (
                 Connection connection = DatasourceConfig.getDataSource().getConnection();
-                PreparedStatement statement = connection.prepareStatement(sql);
-                ) {
+                PreparedStatement statement = connection.prepareStatement(sql);) {
 
             statement.setLong(1, consultation.getPatient().getId());
             statement.setLong(2, consultation.getDoctor().getId());
@@ -64,8 +63,7 @@ public class JdbcConsultationDao implements ConsultationDao {
 
         try (
                 Connection connection = DatasourceConfig.getDataSource().getConnection();
-                PreparedStatement statement = connection.prepareStatement(sql);
-        ) {
+                PreparedStatement statement = connection.prepareStatement(sql);) {
 
             statement.setLong(1, id);
 
@@ -80,12 +78,11 @@ public class JdbcConsultationDao implements ConsultationDao {
     public List<Consultation> findAll() {
         List<Consultation> consultations = new ArrayList<>();
 
-        String sql = "SELECT id, patient_id, doctor_id, motif, observations, diagnostic, treatment, cout, statut, date_consultation FROM consultation";
+        String sql = "SELECT * FROM consultation";
 
         try (
                 Connection connection = DatasourceConfig.getDataSource().getConnection();
-                PreparedStatement statement = connection.prepareStatement(sql);
-        ) {
+                PreparedStatement statement = connection.prepareStatement(sql);) {
 
             try (ResultSet result = statement.executeQuery()) {
                 while (result.next()) {
@@ -102,8 +99,7 @@ public class JdbcConsultationDao implements ConsultationDao {
                             result.getString("treatment"),
                             result.getDouble("cout"),
                             StatutConsultation.valueOf(result.getString("statut")),
-                            result.getTimestamp("date_consultation").toLocalDateTime()
-                    ));
+                            result.getTimestamp("date_consultation").toLocalDateTime()));
                 }
             }
 
@@ -113,5 +109,48 @@ public class JdbcConsultationDao implements ConsultationDao {
             System.err.println("Error : " + e.getMessage());
         }
         return List.of();
+    }
+
+    @Override
+    public List<Consultation> findByStatut() {
+
+        List<Consultation> consultations = new ArrayList<>();
+        String sql = "SELECT * FROM consultation WHERE statut = ?";
+
+        try (
+                Connection connection = DatasourceConfig.getDataSource().getConnection();
+                PreparedStatement stmt = connection.prepareStatement(sql);
+        ) {
+
+            stmt.setString(1, StatutConsultation.EN_COURS.name());
+
+            try (ResultSet result = stmt.executeQuery()) {
+                while (result.next()) {
+
+                    Patient patient = patientDAO.findById(result.getLong("patient_id"));
+                    User doctor = userDao.findById(result.getLong("doctor_id"));
+
+                    Consultation consultation = new Consultation(
+                            result.getLong("id"),
+                            patient,
+                            doctor,
+                            result.getString("motif"),
+                            result.getString("observations"),
+                            result.getString("diagnostic"),
+                            result.getString("treatment"),
+                            result.getDouble("cout"),
+                            StatutConsultation.valueOf(result.getString("statut")),
+                            result.getTimestamp("date_consultation").toLocalDateTime()
+                    );
+
+                    consultations.add(consultation);
+                }
+            }
+
+        } catch (SQLException e) {
+            System.err.println("Error : " + e.getMessage());
+        }
+
+        return consultations;
     }
 }

@@ -45,9 +45,13 @@ public class RoleFilter implements Filter {
         String role = user.getRole().name();
 
         if (path.contains("/nurse") && role.equals(UserRole.NURSE.name())) {
-            chain.doFilter(request , response);
-        } else if (path.contains("/generalist") && role.equals(UserRole.GENERALIST.name())) {
-            chain.doFilter(request , response);
+            chain.doFilter(request, response);
+            return;
+        }
+
+        if (path.contains("/generalist") && role.equals(UserRole.GENERALIST.name())) {
+            chain.doFilter(request, response);
+            return;
         }
 
         res.sendError(HttpServletResponse.SC_FORBIDDEN);

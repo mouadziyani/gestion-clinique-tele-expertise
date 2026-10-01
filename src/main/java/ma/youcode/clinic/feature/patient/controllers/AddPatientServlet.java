@@ -46,4 +46,9 @@ public class AddPatientServlet extends HttpServlet {
         req.getSession().setAttribute("success", "Patient créé avec succès.");
         resp.sendRedirect(req.getContextPath() + "/patients");
     }
+
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        req.getRequestDispatcher("/patient/addPatient.jsp").forward(req, resp);
+    }
 }

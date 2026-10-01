@@ -32,6 +32,16 @@ public class LoginServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        String tokenForm = req.getParameter("csrfToken");
+        String tokenSession = (String) req.getSession().getAttribute("csrfToken");
+
+        if (tokenForm == null || tokenSession == null || !tokenForm.equals(tokenSession)) {
+            resp.sendError(HttpServletResponse.SC_FORBIDDEN, "Invalid CSRF token");
+            return;
+        }
+
+        req.getSession().removeAttribute("csrfToken");
+
         String username = req.getParameter("username");
         String password = req.getParameter("password");
 
@@ -39,6 +49,11 @@ public class LoginServlet extends HttpServlet {
 
         if(user == null){
             req.setAttribute("error", "Username ou password incorrect");
+
+            String csrfToken = UUID.randomUUID().toString();
+            req.getSession().setAttribute("csrfToken", csrfToken);
+            req.setAttribute("csrfToken", csrfToken);
+
             req.getRequestDispatcher("/auth/login.jsp").forward(req, resp);
             return;
         }

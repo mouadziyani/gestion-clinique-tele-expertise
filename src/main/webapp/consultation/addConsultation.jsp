@@ -22,7 +22,7 @@
     }
 %>
 
-<form action="<%= request.getContextPath() + "/doctor/consultation/add" %>" method="post">
+<form action="<%= request.getContextPath() + "/generalist/consultations/add" %>" method="post">
 
     <p>
         <label for="patient">Patient :</label>

@@ -36,6 +36,8 @@ public class JdbcConsultationDao implements ConsultationDao {
                 PreparedStatement statement = connection.prepareStatement(sql);
                 ) {
 
+            System.out.println("========== Add Consultation in DB ==========");
+
             statement.setLong(1, consultation.getPatient().getId());
             statement.setLong(2, consultation.getDoctor().getId());
             statement.setString(3, consultation.getMotif());

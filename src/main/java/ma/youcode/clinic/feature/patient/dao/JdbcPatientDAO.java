@@ -12,7 +12,27 @@ import java.util.List;
 public class JdbcPatientDAO implements PatientDAO {
     @Override
     public void save(Patient patient) {
+        String sql = "INSERT INTO patient (nom,prenom,date_naissance,numero_securite_sociale,tension_arterielle,frequence_cardiaque,temperature,frequence_respiratoire,date_arrivee) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
+        try (
+                Connection connection = DatasourceConfig.getDataSource().getConnection();
+                PreparedStatement statement = connection.prepareStatement(sql);
+        ) {
+            statement.setString(1, patient.getNom());
+            statement.setString(2, patient.getPrenom());
+            statement.setDate(3, java.sql.Date.valueOf(patient.getDateNaissance()));
+            statement.setString(4, patient.getNumeroSecuriteSociale());
+            statement.setString(5, patient.getTensionArterielle());
+            statement.setDouble(6, patient.getFrequenceCardiaque());
+            statement.setDouble(7, patient.getTemperature());
+            statement.setDouble(8, patient.getFrequenceRespiratoire());
+            statement.setTimestamp(9, java.sql.Timestamp.valueOf(patient.getDateArrivee()));
+
+            statement.executeUpdate();
+
+        } catch (SQLException e) {
+            System.err.println("Error : " + e.getMessage());
+        }
     }
 
     @Override

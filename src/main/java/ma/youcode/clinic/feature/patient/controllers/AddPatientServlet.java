@@ -15,6 +15,11 @@ public class AddPatientServlet extends HttpServlet {
     private PatientService patientService;
 
     @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        req.getRequestDispatcher("/patient/addPatient.jsp").forward(req, resp);
+    }
+
+    @Override
     public void init() throws ServletException {
         patientService = new PatientService();
     }
@@ -34,7 +39,7 @@ public class AddPatientServlet extends HttpServlet {
 
         if (!errors.isEmpty()) {
             req.setAttribute("errors", errors);
-            req.getRequestDispatcher("/WEB-INF/views/patientForm.jsp").forward(req, resp);
+            req.getRequestDispatcher("/patient/addPatient.jsp").forward(req, resp);
             return;
         }
 

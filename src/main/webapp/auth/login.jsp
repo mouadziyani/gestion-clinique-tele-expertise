@@ -453,7 +453,7 @@
             <% } %>
 
             <form action="${pageContext.request.contextPath}/auth/login" method="post">
-
+                <input type="hidden" name="csrfToken" value="<%= request.getAttribute("csrfToken") %>">
                 <!-- Input Username -->
                 <div class="form-group">
                     <div class="input-box">

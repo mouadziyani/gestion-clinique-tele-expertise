@@ -13,9 +13,10 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 @WebServlet("/generalist/consultations/add")
-public class ConsultationServlet extends HttpServlet {
+public class AddConsultationServlet extends HttpServlet {
 
     private final PatientService patientService = new PatientService();
     private final ConsultationService consultationService = new ConsultationService();
@@ -48,7 +49,7 @@ public class ConsultationServlet extends HttpServlet {
 
         LocalDateTime dateConsultation = LocalDateTime.parse(req.getParameter("dateConsultation"));
 
-        consultationService.create(
+        Map<String , String> errors = consultationService.create(
                 patientId,
                 doctorId,
                 motif,
@@ -60,7 +61,13 @@ public class ConsultationServlet extends HttpServlet {
                 dateConsultation
         );
 
-        res.sendRedirect(req.getContextPath() + "/generalist/consultations/add");
+        if (!errors.isEmpty()) {
+            req.getSession().setAttribute("errors" , errors);
+            res.sendRedirect(req.getContextPath() + "/generalist/consultations/add");
+            return;
+        }
+
+        res.sendRedirect(req.getContextPath() + "/generalist/home");
     }
 
 }

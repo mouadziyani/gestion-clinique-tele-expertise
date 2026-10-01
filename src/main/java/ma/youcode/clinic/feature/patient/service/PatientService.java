@@ -5,6 +5,7 @@ import ma.youcode.clinic.feature.patient.dao.PatientDAO;
 import ma.youcode.clinic.modal.Patient;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeParseException;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -16,17 +17,27 @@ public class PatientService {
         patientDAO = new JdbcPatientDAO();
     }
 
-    public void createPatient(
+    public Map<String , String> createPatient(
             String nom,
             String prenom,
-            LocalDate dateNaissance,
+            String dateNaissance,
             String numeroSecuriteSociale,
             String tensionArterielle,
             Double frequenceCardiaque,
             Double temperature,
             Double frequenceRespiratoire
     ) {
+        Map<String , String> errors = validatePatient(nom, prenom, dateNaissance, numeroSecuriteSociale, tensionArterielle, frequenceCardiaque, temperature, frequenceRespiratoire);
 
+
+        if (errors.isEmpty()) {
+            LocalDate dN = LocalDate.parse(dateNaissance);
+
+            Patient patient = new Patient(nom , prenom , dN ,numeroSecuriteSociale , tensionArterielle , frequenceCardiaque , temperature , frequenceRespiratoire , LocalDateTime.now());
+
+            patientDAO.save(patient);
+        }
+        return errors;
     }
 
     public Patient findById(Long id) {
@@ -36,7 +47,7 @@ public class PatientService {
     private Map<String, String> validatePatient(
             String nom,
             String prenom,
-            LocalDate dateNaissance,
+            String dateNaissance,
             String numeroSecuriteSociale,
             String tensionArterielle,
             Double frequenceCardiaque,
@@ -50,14 +61,16 @@ public class PatientService {
         if (prenom.isEmpty()) errors.put("prenom", "Le prénom est obligatoire.");
 
         try {
-            if (dateNaissance.isAfter(LocalDate.now())) {
+            LocalDate dN = LocalDate.parse(dateNaissance);
+
+            if (dN.isAfter(LocalDate.now())) {
                 errors.put("dateNaissance", "La date de naissance ne peut pas être dans le futur.");
             }
         } catch (DateTimeParseException e) {
             errors.put("dateNaissance", "La date de naissance est invalide.");
         }
 
-        if (!numeroSecuriteSociale.matches("\\d{7}")) errors.put("numeroSecuriteSociale", "Le numéro de sécurité sociale doit contenir 15 chiffres.");
+        if (!numeroSecuriteSociale.matches("\\d{7}")) errors.put("numeroSecuriteSociale", "Le numéro de sécurité sociale doit contenir 7 chiffres.");
 
         if (!tensionArterielle.matches("\\d{2,3}/\\d{2,3}")) errors.put("tensionArterielle", "Format attendu : 120/80.");
 
@@ -66,5 +79,7 @@ public class PatientService {
         if (temperature < 25 || temperature > 45) errors.put("temperature" , "Temperature invalide");
 
         if (frequenceRespiratoire < 1 || frequenceRespiratoire > 80) errors.put("frequenceRespiratoire" , "Fréquence respiratoir invalide");
+
+        return errors;
     }
 }

@@ -18,6 +18,17 @@ public class Patient {
 
     private LocalDateTime dateArrivee;
 
+    public Patient(String nom, String prenom, LocalDate dateNaissance, String numeroSecuriteSociale, String tensionArterielle, Double frequenceCardiaque, Double temperature, Double frequenceRespiratoire, LocalDateTime dateArrivee) {
+        this.nom = nom;
+        this.prenom = prenom;
+        this.dateNaissance = dateNaissance;
+        this.numeroSecuriteSociale = numeroSecuriteSociale;
+        this.tensionArterielle = tensionArterielle;
+        this.frequenceCardiaque = frequenceCardiaque;
+        this.temperature = temperature;
+        this.frequenceRespiratoire = frequenceRespiratoire;
+        this.dateArrivee = dateArrivee;
+    }
     public Patient(Long id, String nom, String prenom, LocalDate dateNaissance, String numeroSecuriteSociale, String tensionArterielle, Double frequenceCardiaque, Double temperature, Double frequenceRespiratoire, LocalDateTime dateArrivee) {
         this.id = id;
         this.nom = nom;

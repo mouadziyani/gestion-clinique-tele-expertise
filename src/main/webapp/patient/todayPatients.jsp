@@ -15,7 +15,7 @@
 
         <ul>
             <%
-                List<Patient> patients = (List<Patient>) request.getAttribute("todayTatients");
+                List<Patient> patients = (List<Patient>) request.getAttribute("todayPatients");
 
                 for (Patient patient : patients) {
             %>

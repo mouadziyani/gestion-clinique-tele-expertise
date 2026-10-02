@@ -11,6 +11,7 @@
 
 <h1>Generalist</h1>
 
-<a href="<%= request.getContextPath() %>/auth/logout">Logout</a>
+    <a href="<%= request.getContextPath() %>/generalist/consultations/en_cours">En Consultation</a>
+    <a href="<%= request.getContextPath() %>/auth/logout">Logout</a>
 </body>
 </html>

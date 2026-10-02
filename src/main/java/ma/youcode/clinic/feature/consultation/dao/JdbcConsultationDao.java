@@ -123,7 +123,7 @@ public class JdbcConsultationDao implements ConsultationDao {
     }
 
     @Override
-    public List<Consultation> findByStatut() {
+    public List<Consultation> findByStatutEnCour() {
 
         List<Consultation> consultations = new ArrayList<>();
         String sql = "SELECT * FROM consultations WHERE statut = ?";

@@ -2,6 +2,7 @@ package ma.youcode.clinic.feature.consultation.service;
 
 import java.time.LocalDateTime;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 import ma.youcode.clinic.feature.auth.dao.JdbcUserDao;
@@ -72,6 +73,10 @@ public class ConsultationService {
         consultationDao.save(consultation);
 
         return errors;
+    }
+
+    public List<Consultation> getEnCourConsultation() {
+        return consultationDao.findByStatutEnCour();
     }
 
     private Map<String, String> validateConsultation(

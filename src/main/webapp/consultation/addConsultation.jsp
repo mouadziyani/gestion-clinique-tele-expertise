@@ -23,6 +23,7 @@
 %>
 
 <form action="<%= request.getContextPath() + "/generalist/consultations/add" %>" method="post">
+    <input type="hidden" name="csrfToken" value="<%= request.getAttribute("csrfToken") %>">
 
     <p>
         <label for="patient">Patient :</label>

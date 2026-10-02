@@ -28,6 +28,12 @@ public class RoleFilter implements Filter {
             return;
         }
 
+        boolean isLogout = path.equals("/auth/logout");
+        if (isLogout) {
+            chain.doFilter(request , response);
+            return;
+        }
+
         HttpSession session = reqs.getSession(false);
 
         if (session == null) {

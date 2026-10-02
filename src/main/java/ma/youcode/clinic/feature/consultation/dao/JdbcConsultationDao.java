@@ -10,10 +10,7 @@ import ma.youcode.clinic.modal.Patient;
 import ma.youcode.clinic.modal.User;
 import ma.youcode.clinic.modal.enums.StatutConsultation;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,21 +26,33 @@ public class JdbcConsultationDao implements ConsultationDao {
 
     @Override
     public void save(Consultation consultation) {
-        String sql = "INSERT INTO consultation (patient_id , doctor_id , motif , observations , diagnostic , treatment , cout , statut) VALUES (? , ? , ? , ? , ? , ? , ? , ?)";
+        String sql = "INSERT INTO consultations (patient_id , doctor_id , motif , observations , diagnostic , treatment , cout , statut) VALUES (? , ? , ? , ? , ? , ? , ? , ?)";
 
         try (
                 Connection connection = DatasourceConfig.getDataSource().getConnection();
-                PreparedStatement statement = connection.prepareStatement(sql);) {
+                PreparedStatement statement = connection.prepareStatement(sql)) {
 
             System.out.println("========== Add Consultation in DB ==========");
 
             statement.setLong(1, consultation.getPatient().getId());
-            statement.setLong(2, consultation.getDoctor().getId());
+
+            if (consultation.getDoctor() == null) {
+                statement.setNull(2, Types.BIGINT);
+            } else {
+                statement.setLong(2 , consultation.getDoctor().getId());
+            }
+
             statement.setString(3, consultation.getMotif());
             statement.setString(4, consultation.getObservations());
             statement.setString(5, consultation.getDiagnostic());
             statement.setString(6, consultation.getTreatment());
-            statement.setDouble(7, consultation.getCout());
+
+            if (consultation.getCout() == null) {
+                statement.setNull(7 , Types.DOUBLE);
+            } else {
+                statement.setDouble(7, consultation.getCout());
+            }
+
             statement.setString(8, consultation.getStatut().name());
 
             statement.executeUpdate();
@@ -61,7 +70,7 @@ public class JdbcConsultationDao implements ConsultationDao {
 
     @Override
     public void delete(long id) {
-        String sql = "DELETE FROM consultation WHERE id = ?";
+        String sql = "DELETE FROM consultations WHERE id = ?";
 
         try (
                 Connection connection = DatasourceConfig.getDataSource().getConnection();
@@ -80,7 +89,7 @@ public class JdbcConsultationDao implements ConsultationDao {
     public List<Consultation> findAll() {
         List<Consultation> consultations = new ArrayList<>();
 
-        String sql = "SELECT * FROM consultation";
+        String sql = "SELECT * FROM consultations";
 
         try (
                 Connection connection = DatasourceConfig.getDataSource().getConnection();
@@ -117,7 +126,7 @@ public class JdbcConsultationDao implements ConsultationDao {
     public List<Consultation> findByStatut() {
 
         List<Consultation> consultations = new ArrayList<>();
-        String sql = "SELECT * FROM consultation WHERE statut = ?";
+        String sql = "SELECT * FROM consultations WHERE statut = ?";
 
         try (
                 Connection connection = DatasourceConfig.getDataSource().getConnection();

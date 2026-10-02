@@ -3,7 +3,7 @@ package ma.youcode.clinic.modal;
 import ma.youcode.clinic.modal.enums.UserRole;
 
 public class User {
-    private long id;
+    private Long id;
     private String username;
     private String password;
     private UserRole Role;
@@ -15,7 +15,7 @@ public class User {
         Role = role;
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 

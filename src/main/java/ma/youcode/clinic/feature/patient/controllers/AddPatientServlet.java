@@ -5,7 +5,9 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import ma.youcode.clinic.feature.consultation.service.ConsultationService;
 import ma.youcode.clinic.feature.patient.service.PatientService;
+import ma.youcode.clinic.modal.Consultation;
 
 import java.io.IOException;
 import java.util.Map;
@@ -51,7 +53,7 @@ public class AddPatientServlet extends HttpServlet {
         }
 
         req.getSession().setAttribute("success", "Patient créé avec succès.");
-        resp.sendRedirect(req.getContextPath() + "/patients");
+        resp.sendRedirect(req.getContextPath() + "/nurse/home");
     }
 
     @Override

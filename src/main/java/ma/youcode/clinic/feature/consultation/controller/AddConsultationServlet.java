@@ -14,6 +14,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 @WebServlet("/generalist/consultations/add")
 public class AddConsultationServlet extends HttpServlet {
@@ -24,6 +25,10 @@ public class AddConsultationServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse res)
             throws ServletException, IOException {
+
+        String csrfToken = UUID.randomUUID().toString();
+        req.getSession().setAttribute("csrfToken", csrfToken);
+        req.setAttribute("csrfToken", csrfToken);
             
         List<Patient> patients = patientService.findPatientsDuJour(LocalDate.now());
         req.setAttribute("patients", patients);
@@ -33,6 +38,16 @@ public class AddConsultationServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse res)
             throws ServletException, IOException {
+
+        String tokenForm = req.getParameter("csrfToken");
+        String tokenSession = (String) req.getSession().getAttribute("csrfToken");
+
+        if (tokenForm == null || tokenSession == null || !tokenForm.equals(tokenSession)) {
+            res.sendError(HttpServletResponse.SC_FORBIDDEN, "Invalid CSRF token");
+            return;
+        }
+
+        req.getSession().removeAttribute("csrfToken");
 
         long patientId = Long.parseLong(req.getParameter("patientId"));
         User doctor = (User)req.getSession().getAttribute("user");

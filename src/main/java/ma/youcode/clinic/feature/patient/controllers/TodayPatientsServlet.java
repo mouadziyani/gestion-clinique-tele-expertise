@@ -27,7 +27,7 @@ public class TodayPatientsServlet extends HttpServlet {
         
         List<Patient> patients = patientService.findPatientsDuJour(LocalDate.now());
 
-        req.setAttribute("patients", patients);
+        req.setAttribute("todayPatients", patients);
 
         req.getRequestDispatcher("/patient/todayPatients.jsp").forward(req, resp);   
     }

@@ -70,7 +70,6 @@ public class JdbcUserDao implements UserDao {
 
     @Override
     public List<User> findAll() {
-
         String sql = "SELECT * FROM users";
         List<User> users = new ArrayList<>();
 
@@ -111,5 +110,33 @@ public class JdbcUserDao implements UserDao {
         }
 
         return null;
+    }
+
+    @Override
+    public List<User> findByRole(UserRole role) {
+        String sql = "SELECT * FROM users WHERE  role = ?";
+        List<User> users = new ArrayList<>();
+
+        try (Connection con = DatasourceConfig.getDataSource().getConnection();
+             PreparedStatement pstmt = con.prepareStatement(sql);
+             ) {
+
+            pstmt.setString(1 , role.name());
+
+            try (ResultSet result = pstmt.executeQuery()) {
+                while (result.next()) {
+                    users.add(new User(
+                        result.getLong("id"),
+                        result.getString("username"),
+                        result.getString("password"),
+                        UserRole.valueOf(result.getString("role"))));
+                }
+            }
+
+        } catch (SQLException e) {
+            System.err.println(e.getMessage());
+        }
+
+        return users;
     }
 }

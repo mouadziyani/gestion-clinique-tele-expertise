@@ -123,7 +123,7 @@ public class JdbcConsultationDao implements ConsultationDao {
     }
 
     @Override
-    public List<Consultation> findByStatut() {
+    public List<Consultation> findByStatutEnCour() {
 
         List<Consultation> consultations = new ArrayList<>();
         String sql = "SELECT * FROM consultations WHERE statut = ?";
@@ -163,5 +163,43 @@ public class JdbcConsultationDao implements ConsultationDao {
         }
 
         return consultations;
+    }
+
+    @Override
+    public void update(Consultation consultation) {
+        String sql = """
+        UPDATE consultation
+        SET
+            observations = ?,
+            diagnostic = ?,
+            treatment = ?,
+            cout = ?,
+            statut = ?
+        WHERE id = ?;
+        """;
+
+        try (
+                Connection connection = DatasourceConfig.getDataSource().getConnection();
+                PreparedStatement statement = connection.prepareStatement(sql)
+        ) {
+
+            statement.setString(1, consultation.getObservations());
+            statement.setString(2, consultation.getDiagnostic());
+            statement.setString(3, consultation.getTreatment());
+
+            if (consultation.getCout() == null) {
+                statement.setNull(4, Types.DECIMAL);
+            } else {
+                statement.setDouble(4, consultation.getCout());
+            }
+
+            statement.setString(5, consultation.getStatut().name());
+            statement.setLong(6, consultation.getId());
+
+            statement.executeUpdate();
+
+        } catch (SQLException e) {
+            System.err.println("Error : " + e.getMessage());
+        }
     }
 }

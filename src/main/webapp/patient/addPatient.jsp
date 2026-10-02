@@ -17,6 +17,7 @@
 %>
 
 <form action="<%= request.getContextPath() + "/nurse/patient/add" %>" method="post">
+    <input type="hidden" name="csrfToken" value="<%= request.getAttribute("csrfToken") %>">
     <p>
         <label for="nom">Nom :</label>
         <input type="text" id="nom" name="nom" required>

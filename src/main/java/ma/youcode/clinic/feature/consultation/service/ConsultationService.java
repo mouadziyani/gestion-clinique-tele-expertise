@@ -28,79 +28,52 @@ public class ConsultationService {
         userDao = new JdbcUserDao();
     }
 
-    public Map<String, String> create(
-            long patientId,
-            long doctorId,
-            String motif,
+    public Map<String, String> update(
+            long consultationId,
             String observations,
             String diagnostic,
             String treatment,
             double cout,
-            StatutConsultation statut,
-            LocalDateTime dateConsultation
+            StatutConsultation statut
     ) {
-        Map<String, String> errors = validateConsultation(
-                patientId,
-                doctorId,
-                motif,
+        Map<String, String> errors = validateConsultationUpdate(
                 observations,
                 diagnostic,
                 treatment,
                 cout,
-                statut,
-                dateConsultation
+                statut
         );
 
         if (!errors.isEmpty()) {
             return errors;
         }
 
-        Patient patient = patientDao.findById(patientId);
-        User doctor = userDao.findById(doctorId);
+        Consultation consultation = consultationDao.findById(consultationId);
 
-        Consultation consultation = new Consultation(
-                patient,
-                doctor,
-                motif,
-                observations,
-                diagnostic,
-                treatment,
-                cout,
-                statut,
-                dateConsultation
-        );
+        if (consultation == null) {
+            errors.put("consultation", "La consultation n'existe pas.");
+            return errors;
+        }
 
-        consultationDao.save(consultation);
+        consultation.setObservations(observations);
+        consultation.setDiagnostic(diagnostic);
+        consultation.setTreatment(treatment);
+        consultation.setCout(cout);
+        consultation.setStatut(statut);
+
+        consultationDao.update(consultation);
 
         return errors;
     }
 
-    private Map<String, String> validateConsultation(
-            long patientId,
-            long doctorId,
-            String motif,
+    private Map<String, String> validateConsultationUpdate(
             String observations,
             String diagnostic,
             String treatment,
             double cout,
-            StatutConsultation statut,
-            LocalDateTime dateConsultation
+            StatutConsultation statut
     ) {
         Map<String, String> errors = new LinkedHashMap<>();
-
-        Patient patient = patientDao.findById(patientId);
-        if (patient == null) {
-            errors.put("patientId", "Le patient est obligatoire.");
-        }
-
-        User doctor = userDao.findById(doctorId);
-        if (doctor == null) {
-            errors.put("doctorId", "Le médecin est obligatoire.");
-        }
-
-        if (motif == null || motif.trim().isEmpty()) {
-            errors.put("motif", "Le motif est obligatoire.");
-        }
 
         if (observations == null || observations.trim().isEmpty()) {
             errors.put("observations", "Les observations sont obligatoires.");
@@ -122,16 +95,14 @@ public class ConsultationService {
             errors.put("statut", "Le statut est obligatoire.");
         }
 
-        if (dateConsultation == null) {
-            errors.put("dateConsultation", "La date de consultation est obligatoire.");
-        } else if (dateConsultation.isAfter(LocalDateTime.now())) {
-            errors.put("dateConsultation", "La date de consultation ne peut pas être dans le futur.");
-        }
-
         return errors;
     }
 
     public List<Consultation> getEnCourDoctorConsultation(Long doctorId) {
         return consultationDao.findByStatutEnCourAndDoctor(doctorId);
+    }
+
+    public Consultation findById(Long id) {
+        return consultationDao.findById(id);
     }
 }

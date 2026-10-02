@@ -30,11 +30,11 @@
             <td>${consultation.patient.dateArrivee}</td>
             <td>${consultation.motif}</td>
             <td>
-                <form action="${pageContext.request.contextPath}/consultation/edit" method="get" style="display:inline;">
+                <form action="${pageContext.request.contextPath}/generalist/consultation/edit" method="get" style="display:inline;">
                     <input type="hidden" name="id" value="${consultation.id}">
                     <button type="submit">Consulter</button>
                 </form>
-                <form action="${pageContext.request.contextPath}/consultation/delete" method="post" style="display:inline;">
+                <form action="${pageContext.request.contextPath}/generalist/consultation/delete" method="post" style="display:inline;">
                     <input type="hidden" name="id" value="${consultation.id}">
                     <button type="submit" onclick="return confirm('Voulez-vous supprimer cette consultation ?');">Supprimer</button>
                 </form>

@@ -75,10 +75,6 @@ public class ConsultationService {
         return errors;
     }
 
-    public List<Consultation> getEnCourConsultation() {
-        return consultationDao.findByStatutEnCour();
-    }
-
     private Map<String, String> validateConsultation(
             long patientId,
             long doctorId,
@@ -133,5 +129,9 @@ public class ConsultationService {
         }
 
         return errors;
+    }
+
+    public List<Consultation> getEnCourDoctorConsultation(Long doctorId) {
+        return consultationDao.findByStatutEnCourAndDoctor(doctorId);
     }
 }

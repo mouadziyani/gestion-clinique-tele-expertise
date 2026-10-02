@@ -7,12 +7,13 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import ma.youcode.clinic.feature.consultation.service.ConsultationService;
 import ma.youcode.clinic.modal.Consultation;
+import ma.youcode.clinic.modal.User;
 
 import java.io.IOException;
 import java.util.List;
 
 @WebServlet("/generalist/consultations/en_cours")
-public class EnCoursConsultation extends HttpServlet {
+public class EnCoursDoctorConsultation extends HttpServlet {
     private ConsultationService consultationService;
 
     @Override
@@ -22,7 +23,8 @@ public class EnCoursConsultation extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        List<Consultation> consultations = consultationService.getEnCourConsultation();
+        User doctor = (User) req.getSession().getAttribute("user");
+        List<Consultation> consultations = consultationService.getEnCourDoctorConsultation(doctor.getId());
 
         req.setAttribute("enCourConsultations" , consultations);
         req.getRequestDispatcher("/consultation/enCourConsultation.jsp").forward(req , resp);

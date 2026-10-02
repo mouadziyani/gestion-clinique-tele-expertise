@@ -123,17 +123,18 @@ public class JdbcConsultationDao implements ConsultationDao {
     }
 
     @Override
-    public List<Consultation> findByStatutEnCour() {
+    public List<Consultation> findByStatutEnCourAndDoctor(Long doctorId) {
 
         List<Consultation> consultations = new ArrayList<>();
-        String sql = "SELECT * FROM consultations WHERE statut = ?";
+        String sql = "SELECT * FROM consultations WHERE doctor_id = ? AND statut = ?";
 
         try (
                 Connection connection = DatasourceConfig.getDataSource().getConnection();
                 PreparedStatement stmt = connection.prepareStatement(sql);
         ) {
 
-            stmt.setString(1, StatutConsultation.EN_COURS.name());
+            stmt.setLong(1 , doctorId);
+            stmt.setString(2, StatutConsultation.EN_COURS.name());
 
             try (ResultSet result = stmt.executeQuery()) {
                 while (result.next()) {

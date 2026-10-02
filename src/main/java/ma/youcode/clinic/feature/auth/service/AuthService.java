@@ -1,10 +1,13 @@
 package ma.youcode.clinic.feature.auth.service;
 
+import ma.youcode.clinic.modal.enums.UserRole;
 import org.mindrot.jbcrypt.BCrypt;
 
 import ma.youcode.clinic.feature.auth.dao.JdbcUserDao;
 import ma.youcode.clinic.feature.auth.dao.UserDao;
 import ma.youcode.clinic.modal.User;
+
+import java.util.List;
 
 public class AuthService {
    

@@ -41,7 +41,7 @@ public class DatabaseInitializer {
 
     private void createPatientTable() {
         String sql = """
-                CREATE TABLE IF NOT EXISTS patient (
+                CREATE TABLE IF NOT EXISTS patients (
                     id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
                     nom VARCHAR(100) NOT NULL,
                     prenom VARCHAR(100) NOT NULL,
@@ -68,18 +68,18 @@ public class DatabaseInitializer {
 
     private void createConsultationTable() {
         String sql = """
-                CREATE TABLE IF NOT EXISTS consultation (
+                CREATE TABLE IF NOT EXISTS consultations (
                     id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
                     patient_id BIGINT NOT NULL,
-                    doctor_id BIGINT NOT NULL,
-                    motif VARCHAR(255) NOT NULL,
+                    doctor_id BIGINT,
+                    motif VARCHAR(255),
                     observations TEXT,
                     diagnostic TEXT,
                     treatment TEXT,
                     cout DECIMAL(10, 2),
                     statut VARCHAR(30) NOT NULL,
                     date_consultation DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-                    CONSTRAINT fk_consultation_patient FOREIGN KEY (patient_id) REFERENCES patient(id),
+                    CONSTRAINT fk_consultation_patient FOREIGN KEY (patient_id) REFERENCES patients(id),
                     CONSTRAINT fk_consultation_doctor FOREIGN KEY (doctor_id) REFERENCES `users`(id)
                 )
                 """;

@@ -1,8 +1,13 @@
 package ma.youcode.clinic.feature.patient.service;
 
+import ma.youcode.clinic.feature.consultation.dao.ConsultationDao;
+import ma.youcode.clinic.feature.consultation.dao.JdbcConsultationDao;
+import ma.youcode.clinic.feature.consultation.service.ConsultationService;
 import ma.youcode.clinic.feature.patient.dao.JdbcPatientDAO;
 import ma.youcode.clinic.feature.patient.dao.PatientDAO;
+import ma.youcode.clinic.modal.Consultation;
 import ma.youcode.clinic.modal.Patient;
+import ma.youcode.clinic.modal.enums.StatutConsultation;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -13,9 +18,11 @@ import java.util.Map;
 
 public class PatientService {
     private PatientDAO patientDAO;
+    private ConsultationDao consultationDao;
 
     public PatientService() {
         patientDAO = new JdbcPatientDAO();
+        consultationDao = new JdbcConsultationDao();
     }
 
     public Map<String , String> createPatient(
@@ -37,6 +44,10 @@ public class PatientService {
             Patient patient = new Patient(nom , prenom , dN ,numeroSecuriteSociale , tensionArterielle , frequenceCardiaque , temperature , frequenceRespiratoire , LocalDateTime.now());
 
             patientDAO.save(patient);
+
+            Consultation consultation = new Consultation(patient , null , null , null , null , null , null , StatutConsultation.EN_COURS , LocalDateTime.now());
+
+            createPatientConsultation(consultation);
         }
         return errors;
     }
@@ -86,5 +97,9 @@ public class PatientService {
 
     public List<Patient> findPatientsDuJour(LocalDate date) {
         return patientDAO.findPatientsByDay(date);
+    }
+
+    private void createPatientConsultation(Consultation consultation) {
+        consultationDao.save(consultation);
     }
 }

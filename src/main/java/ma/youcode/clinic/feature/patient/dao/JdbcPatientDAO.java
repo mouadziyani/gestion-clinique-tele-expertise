@@ -3,10 +3,7 @@ package ma.youcode.clinic.feature.patient.dao;
 import ma.youcode.clinic.config.DatasourceConfig;
 import ma.youcode.clinic.modal.Patient;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,11 +11,11 @@ import java.util.List;
 public class JdbcPatientDAO implements PatientDAO {
     @Override
     public void save(Patient patient) {
-        String sql = "INSERT INTO patient (nom,prenom,date_naissance,numero_securite_sociale,tension_arterielle,frequence_cardiaque,temperature,frequence_respiratoire,date_arrivee) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO patients (nom,prenom,date_naissance,numero_securite_sociale,tension_arterielle,frequence_cardiaque,temperature,frequence_respiratoire,date_arrivee) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         try (
                 Connection connection = DatasourceConfig.getDataSource().getConnection();
-                PreparedStatement statement = connection.prepareStatement(sql);
+                PreparedStatement statement = connection.prepareStatement(sql , Statement.RETURN_GENERATED_KEYS);
         ) {
             statement.setString(1, patient.getNom());
             statement.setString(2, patient.getPrenom());
@@ -32,6 +29,14 @@ public class JdbcPatientDAO implements PatientDAO {
 
             statement.executeUpdate();
 
+            try (
+                    ResultSet result = statement.getGeneratedKeys()
+                    ) {
+                if (result.next()) {
+                    patient.setId(result.getLong(1));
+                }
+            }
+
         } catch (SQLException e) {
             System.err.println("Error : " + e.getMessage());
         }
@@ -39,7 +44,7 @@ public class JdbcPatientDAO implements PatientDAO {
 
     @Override
     public Patient findById(long id) {
-        String sql = "SELECT * FROM patient WHERE id = ?";
+        String sql = "SELECT * FROM patients WHERE id = ?";
 
         try (
                 Connection connection = DatasourceConfig.getDataSource().getConnection();
@@ -83,7 +88,7 @@ public class JdbcPatientDAO implements PatientDAO {
     public List<Patient> findPatientsByDay(LocalDate date) {
         String sql = """
                 SELECT *
-                FROM patient
+                FROM patients
                 WHERE DATE(date_arrivee) = ?
                 ORDER BY date_arrivee ASC
                 """;

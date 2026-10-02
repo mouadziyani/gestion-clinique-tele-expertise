@@ -65,6 +65,43 @@ public class JdbcConsultationDao implements ConsultationDao {
 
     @Override
     public Consultation findById(long id) {
+        String sql = "SELECT * FROM consultations WHERE id = ?";
+
+        try (
+                Connection connection = DatasourceConfig.getDataSource().getConnection();
+                PreparedStatement statement = connection.prepareStatement(sql);) {
+
+            statement.setLong(1, id);
+
+            try (ResultSet result = statement.executeQuery()) {
+                if (result.next()) {
+                    Patient patient = patientDAO.findById(
+                            result.getLong("patient_id")
+                    );
+
+                    User doctor = userDao.findById(
+                            result.getLong("doctor_id")
+                    );
+
+                    return new Consultation(
+                            result.getLong("id"),
+                            patient,
+                            doctor,
+                            result.getString("motif"),
+                            result.getString("observations"),
+                            result.getString("diagnostic"),
+                            result.getString("treatment"),
+                            result.getObject("cout", Double.class),
+                            StatutConsultation.valueOf(result.getString("statut")),
+                            result.getTimestamp("date_consultation").toLocalDateTime()
+                    );
+                }
+            }
+
+        } catch (SQLException e) {
+            System.err.println("Error : " + e.getMessage());
+        }
+
         return null;
     }
 
@@ -123,17 +160,18 @@ public class JdbcConsultationDao implements ConsultationDao {
     }
 
     @Override
-    public List<Consultation> findByStatutEnCour() {
+    public List<Consultation> findByStatutEnCourAndDoctor(Long doctorId) {
 
         List<Consultation> consultations = new ArrayList<>();
-        String sql = "SELECT * FROM consultations WHERE statut = ?";
+        String sql = "SELECT * FROM consultations WHERE doctor_id = ? AND statut = ?";
 
         try (
                 Connection connection = DatasourceConfig.getDataSource().getConnection();
                 PreparedStatement stmt = connection.prepareStatement(sql);
         ) {
 
-            stmt.setString(1, StatutConsultation.EN_COURS.name());
+            stmt.setLong(1 , doctorId);
+            stmt.setString(2, StatutConsultation.EN_COURS.name());
 
             try (ResultSet result = stmt.executeQuery()) {
                 while (result.next()) {
@@ -168,7 +206,7 @@ public class JdbcConsultationDao implements ConsultationDao {
     @Override
     public void update(Consultation consultation) {
         String sql = """
-        UPDATE consultation
+        UPDATE consultations
         SET
             observations = ?,
             diagnostic = ?,

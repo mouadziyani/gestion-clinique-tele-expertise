@@ -276,9 +276,6 @@
                 <a href="${pageContext.request.contextPath}/nurse/patient/add" class="btn-action btn-primary-action">
                     <i class="fa-solid fa-user-plus"></i> Nouveau
                 </a>
-                <a href="${pageContext.request.contextPath}/" class="btn-action">
-                    <i class="fa-solid fa-home"></i> Accueil
-                </a>
             </div>
         </div>
 

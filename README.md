@@ -34,9 +34,12 @@ mvn clean package
 
 ---
 
-## 👤 Auteur
+## 👥 Auteurs
 
-**Mouad Ziyani** — Développeur Full-Stack (PHP/Laravel · Java/Spring · React)
+Projet réalisé en binôme par :
+
+- **Mouad Ziyani** — [@mouadziyani](https://github.com/mouadziyani)
+- **Wassim Rifi** — [@wassim-rifi-dev](https://github.com/wassim-rifi-dev)
 
 [![Portfolio](https://img.shields.io/badge/Portfolio-mouadziyani.com-d92632?style=flat-square)](https://mouadziyani.com)
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-Mouad%20Ziyani-0A66C2?style=flat-square&logo=linkedin)](https://www.linkedin.com/in/mouad-ziyani-956484339)
@@ -44,6 +47,6 @@ mvn clean package
 
 ## 📄 Licence
 
-© 2025-2026 Mouad Ziyani — **Tous droits réservés.**
+© 2025-2026 Mouad Ziyani & Wassim Rifi — **Tous droits réservés.**
 
-Ce projet est publié uniquement à titre de démonstration (portfolio). Il est **interdit** de copier, cloner, modifier, redistribuer ou réutiliser ce code, en tout ou en partie, sans l'autorisation écrite préalable de l'auteur. Voir le fichier [LICENSE](LICENSE).
+Ce projet est publié uniquement à titre de démonstration (portfolio). Il est **interdit** de copier, cloner, modifier, redistribuer ou réutiliser ce code, en tout ou en partie, sans l'autorisation écrite préalable des auteurs. Voir le fichier [LICENSE](LICENSE).
